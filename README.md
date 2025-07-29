@@ -65,3 +65,9 @@ In the past, developers on a team might work in isolation for an extended period
     * GitOps manages infrastructure/configuration/process using Git as the source of truth. 
 
     * Changes made by committing code to a Git repository, which triggers an automated process to apply those changes in  your environment. This approach is preferred because it offers version control, declarative configuration, and easier rollbacks.
+
+### Pipeline Jobs are of 3 types :
+
+    1) Scripted Pipelines       ( needs some groovy expertise : very wise way of doing things )
+    2) Declarative Pipeline     ( DSL : Jenkins Highly Recommends it)
+    3) YAML Approach            ( Future )
