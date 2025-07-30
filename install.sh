@@ -40,16 +40,13 @@ COMMENT
 
 
 
+#!/bin/bash
+
 LOG_FILE="/tmp/jinstall.log"
 
-echo "=============================="
-echo "Jenkins Installation Started..."
-echo "Log: $LOG_FILE"
-echo "=============================="
-
-# --- Step 1: Root Check ---
+# --- Step 1: Check root user ---
 if [ "$(id -u)" -ne 0 ]; then
-    echo "[ERROR] Please run as root!"
+    echo "[ERROR] You must run this script as root or with sudo!"
     exit 1
 fi
 
@@ -58,7 +55,7 @@ echo "[INFO] Updating system packages..."
 dnf update -y &>> "$LOG_FILE"
 
 # --- Step 3: Install Dependencies ---
-echo "[INFO] Installing Java 17, wget, and fontconfig..."
+echo "[INFO] Installing Java 17, wget, fontconfig, and git..."
 dnf install -y fontconfig java-17-openjdk-devel wget git &>> "$LOG_FILE"
 
 # --- Step 3b: Temporary Fix for RHEL 9 SSL issue ---
@@ -76,68 +73,39 @@ echo "[INFO] Adding Jenkins repository..."
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo &>> "$LOG_FILE"
 rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key &>> "$LOG_FILE"
 
-# --- Step 5: Install Jenkins (RPM Fallback) ---
+# --- Step 5: Install Jenkins (with RPM fallback) ---
 echo "[INFO] Installing Jenkins..."
 dnf install -y jenkins &>> "$LOG_FILE" || {
     echo "[WARNING] Jenkins repo failed. Trying direct RPM installation..."
     cd /tmp
     wget --no-check-certificate https://pkg.jenkins.io/redhat-stable/jenkins-2.452.2-1.1.noarch.rpm &>> "$LOG_FILE"
     dnf install -y ./jenkins-2.452.2-1.1.noarch.rpm &>> "$LOG_FILE" || {
-        echo "[ERROR] Jenkins installation failed. Check $LOG_FILE"
+        echo "[ERROR] Jenkins installation failed. Showing last 20 log lines:"
+        tail -20 "$LOG_FILE"
         exit 3
     }
 }
-
-# --- Step X: Restore Crypto Policy ---
-if [ "$REBOOT_REQUIRED" = true ]; then
-    echo "[INFO] Restoring original crypto policy: $CURRENT_POLICY"
-    update-crypto-policies --set "$CURRENT_POLICY" &>> "$LOG_FILE"
-fi
 
 # --- Step 6: Enable and Start Jenkins ---
 echo "[INFO] Enabling and starting Jenkins service..."
 systemctl enable jenkins &>> "$LOG_FILE"
 systemctl start jenkins &>> "$LOG_FILE"
 
-# --- Step 7: Wait for Jenkins to Initialize ---
-echo "[INFO] Waiting for Jenkins to initialize..."
-sleep 30
-
-# --- Step 8: Firewall Configuration ---
-if command -v firewall-cmd &>/dev/null; then
-    echo "[INFO] Configuring firewall for Jenkins on port 8080..."
-    firewall-cmd --permanent --add-port=8080/tcp &>> "$LOG_FILE"
-    firewall-cmd --reload &>> "$LOG_FILE"
+# --- Step 7: Restore Crypto Policy ---
+if [ "$REBOOT_REQUIRED" = true ]; then
+    echo "[INFO] Restoring original crypto policy: $CURRENT_POLICY"
+    update-crypto-policies --set "$CURRENT_POLICY" &>> "$LOG_FILE"
 fi
 
-# --- Step 9: Configure SSH for Jenkins User ---
-echo "[INFO] Setting up SSH config for Jenkins user..."
-mkdir -p /var/lib/jenkins/.ssh
-cat > /var/lib/jenkins/.ssh/config <<EOF
-Host *
-    UserKnownHostsFile /dev/null
-    StrictHostKeyChecking no
-EOF
-chown -R jenkins:jenkins /var/lib/jenkins/.ssh
-chmod 400 /var/lib/jenkins/.ssh/config
-
-# --- Step 10: Show Initial Admin Password ---
-echo "[INFO] Fetching initial Jenkins admin password..."
-if [ -f /var/lib/jenkins/secrets/initialAdminPassword ]; then
-    echo -e "\n=== Initial Admin Password ==="
+# --- Step 8: Verify Jenkins ---
+if systemctl is-active --quiet jenkins; then
+    echo "[SUCCESS] Jenkins is installed and running!"
+    echo "[INFO] Access Jenkins at: http://<your-server-ip>:8080"
+    echo "[INFO] Initial admin password:"
     cat /var/lib/jenkins/secrets/initialAdminPassword
-    echo -e "\n=============================="
 else
-    echo "[WARNING] Jenkins password file not found yet. Wait 30s and run:"
-    echo "cat /var/lib/jenkins/secrets/initialAdminPassword"
+    echo "[ERROR] Jenkins service is not running. Check $LOG_FILE for details."
+    exit 4
 fi
 
-# --- Step 11: Print Access URL ---
-IP=$(hostname -I | awk '{print $1}')
-echo -e "\n[INFO] Jenkins is running at: http://$IP:8080"
-
-echo -e "\n\033[32mJENKINS INSTALLATION SUCCESSFUL WITH JDK 17!\033[0m"
-
-chmod +x install_jenkins_rhel9.sh
-sudo ./install_jenkins_rhel9.sh
-
+install_jenkins_rhel9.sh
