@@ -57,12 +57,18 @@ fi
 echo "[INFO] Updating system packages..."
 dnf update -y &>> "$LOG_FILE"
 
-# --- Step 3: Install Dependencies (Java 17, wget, fontconfig) ---
+# --- Step 3: Install Dependencies ---
 echo "[INFO] Installing Java 17, wget, and fontconfig..."
 dnf install -y fontconfig java-17-openjdk-devel wget git &>> "$LOG_FILE"
-if [ $? -ne 0 ]; then
-    echo "[ERROR] Failed to install dependencies. Check $LOG_FILE"
-    exit 2
+
+# --- Step 3b: Temporary Fix for RHEL 9 SSL issue ---
+if grep -q "Red Hat Enterprise Linux release 9" /etc/redhat-release; then
+    echo "[INFO] Detected RHEL 9 - Switching crypto policy to LEGACY for Jenkins SSL..."
+    CURRENT_POLICY=$(update-crypto-policies --show)
+    update-crypto-policies --set LEGACY &>> "$LOG_FILE"
+    REBOOT_REQUIRED=true
+else
+    REBOOT_REQUIRED=false
 fi
 
 # --- Step 4: Configure Jenkins Repository ---
@@ -70,20 +76,22 @@ echo "[INFO] Adding Jenkins repository..."
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo &>> "$LOG_FILE"
 rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key &>> "$LOG_FILE"
 
-# --- Step 5: Install Jenkins ---
+# --- Step 5: Install Jenkins (RPM Fallback) ---
 echo "[INFO] Installing Jenkins..."
-dnf install -y jenkins &>> "$LOG_FILE"
-
-if [ $? -ne 0 ]; then
+dnf install -y jenkins &>> "$LOG_FILE" || {
     echo "[WARNING] Jenkins repo failed. Trying direct RPM installation..."
     cd /tmp
     wget --no-check-certificate https://pkg.jenkins.io/redhat-stable/jenkins-2.452.2-1.1.noarch.rpm &>> "$LOG_FILE"
-    dnf install -y ./jenkins-2.452.2-1.1.noarch.rpm &>> "$LOG_FILE"
-    
-    if [ $? -ne 0 ]; then
+    dnf install -y ./jenkins-2.452.2-1.1.noarch.rpm &>> "$LOG_FILE" || {
         echo "[ERROR] Jenkins installation failed. Check $LOG_FILE"
         exit 3
-    fi
+    }
+}
+
+# --- Step X: Restore Crypto Policy ---
+if [ "$REBOOT_REQUIRED" = true ]; then
+    echo "[INFO] Restoring original crypto policy: $CURRENT_POLICY"
+    update-crypto-policies --set "$CURRENT_POLICY" &>> "$LOG_FILE"
 fi
 
 # --- Step 6: Enable and Start Jenkins ---
