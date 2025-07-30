@@ -71,3 +71,6 @@ In the past, developers on a team might work in isolation for an extended period
     1) Scripted Pipelines       ( needs some groovy expertise : very wise way of doing things )
     2) Declarative Pipeline     ( DSL : Jenkins Highly Recommends it)
     3) YAML Approach            ( Future )
+
+
+
