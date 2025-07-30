@@ -73,9 +73,13 @@ rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key &>> "$LOG_FILE"
 # --- Step 5: Install Jenkins ---
 echo "[INFO] Installing Jenkins..."
 dnf install -y jenkins &>> "$LOG_FILE"
+
 if [ $? -ne 0 ]; then
-    echo "[WARNING] GPG check failed. Retrying with --nogpgcheck..."
-    dnf install -y jenkins --nogpgcheck &>> "$LOG_FILE"
+    echo "[WARNING] Jenkins repo failed. Trying direct RPM installation..."
+    cd /tmp
+    wget --no-check-certificate https://pkg.jenkins.io/redhat-stable/jenkins-2.452.2-1.1.noarch.rpm &>> "$LOG_FILE"
+    dnf install -y ./jenkins-2.452.2-1.1.noarch.rpm &>> "$LOG_FILE"
+    
     if [ $? -ne 0 ]; then
         echo "[ERROR] Jenkins installation failed. Check $LOG_FILE"
         exit 3
@@ -125,3 +129,4 @@ IP=$(hostname -I | awk '{print $1}')
 echo -e "\n[INFO] Jenkins is running at: http://$IP:8080"
 
 echo -e "\n\033[32mJENKINS INSTALLATION SUCCESSFUL WITH JDK 17!\033[0m"
+
