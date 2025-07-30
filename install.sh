@@ -138,3 +138,6 @@ echo -e "\n[INFO] Jenkins is running at: http://$IP:8080"
 
 echo -e "\n\033[32mJENKINS INSTALLATION SUCCESSFUL WITH JDK 17!\033[0m"
 
+chmod +x install_jenkins_rhel9.sh
+sudo ./install_jenkins_rhel9.sh
+
