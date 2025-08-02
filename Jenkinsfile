@@ -1,22 +1,22 @@
 pipeline {
     agent any 
     environment { 
-        URL = "Pipeline.google.com"        
+        ENV.URL = "Pipeline.google.com"        
     }
     stages {
         stage('First stage') { 
             steps {
                sh "echo Welcome world!" 
-               sh "echo ${URL}"
+               sh "echo ${ENV.URL}"
             }
         }
         stage('Second stage') { 
              environment { 
-                 URL = "stage.google.com"  
+              ENV.URL = "stage.google.com"  
            }
             steps {
                 sh "echo Welcome Tataji"
-                sh "echo ${URL}" 
+                sh "echo ${ENV.URL}" 
             }
         }
         stage('Third stage') { 
