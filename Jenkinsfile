@@ -1,7 +1,7 @@
 pipeline {
     agent any 
     environment { 
-        ENV_URL = "Pipeline.google.com"        
+        URL = "Pipeline.google.com"        
     }
     stages {
         stage('First stage') { 
@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Second stage') { 
              environment { 
-                 ENV_URL = "stage.google.com"  
+                 URL = "stage.google.com"  
            }
             steps {
                 sh "echo Welcome Tataji"
