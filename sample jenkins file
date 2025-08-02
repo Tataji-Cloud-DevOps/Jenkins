@@ -19,7 +19,112 @@ pipeline {
     }
 }
 
+### Here all keywords like pipeline,agentany,stages are all directives.
 
-// Here all keywords like pipeline,agentany,stages are all directives.
 
-// Here 
+# Declarative Pipeline
+
+## Directives
+
+### environment 
+
+````````
+The environment directive specifies a sequence of key-value pairs which will be defined
+ as environment variables for all steps, or stage-specific steps, depending on where the 
+ environment directive is located within the Pipeline.
+````````
+
+### Syntax for environment variable
+
+``````````
+pipeline {
+    agent any
+    environment { 
+        CC = 'clang'
+    }
+    stages {
+        stage('Example') {
+            environment { 
+                AN_ACCESS_KEY = credentials('my-predefined-secret-text') 
+            }
+            steps {
+                sh 'printenv'
+            }
+        }
+    }
+}
+``````````
+### example of the environment variable
+
+``````````
+pipeline {
+    agent any 
+    environment { 
+        ENV URL = "Pipeline.google.com"        # Global Variable : All the stages of the pipeline can inherit this
+    }
+    stages {
+        stage('First stage') { 
+            steps {
+               sh "echo Welcome world!" 
+               sh "echo ${ENV_URL}"
+            }
+        }
+        stage('Second stage') { 
+             environment { 
+                 ENV URL = "Pipeline.google.com"  # Local Variable :Scope of the local variable is confined to this stage only
+           }
+            steps {
+                sh "echo Welcome Tataji"
+                sh "echo ${ENV_URL}" 
+            }
+        }
+        stage('Third stage') { 
+            steps {
+               echo "Welcome DevOps"
+            }
+        }
+    }
+}
+
+``````````
+
+# Supported Credentials Type
+
+# Secret Text
+
+``````````
+pipeline {
+    agent any 
+    environment { 
+        ENV URL = "Pipeline.google.com"        # Global Variable : All the stages of the pipeline can inherit this
+    }
+    stages {
+        stage('First stage') { 
+            steps {
+               sh "echo Welcome world!" 
+               sh "echo ${ENV_URL}"
+            }
+        }
+        stage('Second stage') { 
+             environment { 
+                 ENV URL = "Pipeline.google.com"  # Local Variable :Scope of the local variable is confined to this stage only
+           }
+            steps {
+                sh "echo Welcome Tataji"
+                sh "echo ${ENV_URL}" 
+                sh "env"
+            }
+        }
+        stage('Third stage') { 
+            steps {
+               echo "Welcome DevOps"
+            }
+        }
+    }
+}
+
+`````````
+
+
+
+
