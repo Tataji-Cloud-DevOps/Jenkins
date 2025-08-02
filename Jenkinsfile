@@ -16,7 +16,7 @@ pipeline {
            }
             steps {
                 sh "echo Welcome Tataji"
-                sh "echo ${ENV_URL}" 
+                sh "echo ${URL}" 
             }
         }
         stage('Third stage') { 
