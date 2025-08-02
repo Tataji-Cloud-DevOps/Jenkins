@@ -7,7 +7,7 @@ pipeline {
         stage('First stage') { 
             steps {
                sh "echo Welcome world!" 
-               sh "echo ${ENV_URL}"
+               sh "echo ${URL}"
             }
         }
         stage('Second stage') { 
