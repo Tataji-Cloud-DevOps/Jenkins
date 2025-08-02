@@ -90,7 +90,10 @@ pipeline {
 
 # Supported Credentials Type
 
-# Secret Text
+##  Environment variables
+# $ env ----it is command for list of environment variables that already declared in the linux.
+#   ex : * a=1000 if we declare it will not store in the system heat memory but it is defined as local.
+#        * export a=1000 if we declare it will store in the system heat memory.
 
 ``````````
 pipeline {
@@ -112,7 +115,7 @@ pipeline {
             steps {
                 sh "echo Welcome Tataji"
                 sh "echo ${ENV_URL}" 
-                sh "env"
+                sh "env"                  # Environment variables
             }
         }
         stage('Third stage') { 

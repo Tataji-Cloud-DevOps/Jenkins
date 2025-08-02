@@ -1,7 +1,7 @@
 pipeline {
     agent any 
     environment { 
-        ENV URL = "Pipeline.google.com"        // Global Variable : All the stages of the pipeline can inherit this
+        ENV URL = "Pipeline.google.com"        
     }
     stages {
         stage('First stage') { 
@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Second stage') { 
              environment { 
-                 ENV URL = "Pipeline.google.com"  // Local Variable :Scope of the local variable is confined to this stage only
+                 ENV URL = "Pipeline.google.com"  
            }
             steps {
                 sh "echo Welcome Tataji"
