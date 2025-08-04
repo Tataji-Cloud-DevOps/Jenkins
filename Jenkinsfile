@@ -1,7 +1,7 @@
 pipeline {
     agent any 
     environment { 
-        ENV URL = "Pipeline.google.com"        
+        ENV_URL = "Pipeline.google.com"
         SSHCRED = credentials('SSHCRED')       
     }
     options {
@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Second stage') { 
              environment { 
-                 ENV URL = "Pipeline.google.com"   
+                 ENV_URL  = "Pipeline.google.com" 
            }
             steps {
                 sh "echo Welcome Tataji"
