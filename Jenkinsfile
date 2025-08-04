@@ -1,7 +1,7 @@
 pipeline {
     agent any 
     environment { 
-        ENV_URL= "Pipeline.google.com"        
+        ENV URL = "Pipeline.google.com"        
         SSHCRED = credentials('SSHCRED')       
     }
     options {
@@ -10,27 +10,34 @@ pipeline {
      timeout(time: 1, unit: 'MINUTES')
     }
     parameters {
-        string(name: 'COMPONENT', defaultValue: 'mongodb', description:'Enter the component')
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
         text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
         booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
         choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+    }
+    tools {
+        maven 'apache-maven-395'
     }
     stages {
         stage('First stage') { 
             steps {
                sh "echo Welcome world!" 
                sh "echo ${ENV_URL}"
+               sh "mvn --version"
             }
         }
         stage('Second stage') { 
              environment { 
-                 ENV_URL= "Pipeline.google.com"  
+                 ENV URL = "Pipeline.google.com"  
            }
+           tools {
+               maven 'apache-maven-398'
+    }
             steps {
                 sh "echo Welcome Tataji"
                 sh "echo ${ENV_URL}" 
-                sh "env"
-                sh "sleep 1"        
+                sh "env"                  
+                sh "mvn --version"
             }
         }
         stage('Third stage') { 
