@@ -1,13 +1,19 @@
 pipeline {
     agent any 
     environment { 
-        ENV_URL= "Pipeline.google.com" 
+        ENV_URL= "Pipeline.google.com"        
         SSHCRED = credentials('SSHCRED')       
     }
     options {
      buildDiscarder(logRotator(numToKeepStr: '5'))
      disableConcurrentBuilds()
-     timeout(time: 0, unit: 'SECONDS')
+     timeout(time: 1, unit: 'MINUTES')
+    }
+    parameters {
+        string(name: 'COMPONENT',defaultValue: 'mongodb',description:'Enter the component'
+        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
     }
     stages {
         stage('First stage') { 
@@ -18,12 +24,12 @@ pipeline {
         }
         stage('Second stage') { 
              environment { 
-                 ENV_URL= "Pipeline.google.com" 
+                 ENV_URL= "Pipeline.google.com"  
            }
             steps {
                 sh "echo Welcome Tataji"
                 sh "echo ${ENV_URL}" 
-                sh "env"                    
+                sh "env"                  s
             }
         }
         stage('Third stage') { 
@@ -33,6 +39,3 @@ pipeline {
         }
     }
 }
-
-
-
