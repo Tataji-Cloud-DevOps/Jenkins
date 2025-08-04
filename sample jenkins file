@@ -87,9 +87,6 @@ pipeline {
 }
 
 ``````````
-
-# Supported Credentials Type
-
 ##  Environment variables
 # $ env ----it is command for list of environment variables that already declared in the linux.
 #   ex : * a=1000 if we declare it will not store in the system heat memory but it is defined as local.
@@ -127,6 +124,16 @@ pipeline {
 }
 
 `````````
+## Supported Credentials Type
+### Username and password
+### If any sort of sensitive information thats need to supply to jenkins where do you declare it?
+```````
+Jenkins offers a quite generic and secret manager where we store the secrets and we can fetch the secrets.
+
+Manage JENKINS > Credentials > System > Global credentials > Add credentials
+
+```````
+
 
 
 
