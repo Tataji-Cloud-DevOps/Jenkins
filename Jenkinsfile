@@ -10,7 +10,7 @@ pipeline {
      timeout(time: 1, unit: 'MINUTES')
     }
     parameters {
-        string(name: 'COMPONENT',defaultValue: 'mongodb',description:'Enter the component'
+        string(name: 'COMPONENT', defaultValue: 'mongodb', description:'Enter the component')
         text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
         booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
         choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
@@ -29,7 +29,8 @@ pipeline {
             steps {
                 sh "echo Welcome Tataji"
                 sh "echo ${ENV_URL}" 
-                sh "env"                  s
+                sh "env"
+                sh "sleep 1"        s
             }
         }
         stage('Third stage') { 
