@@ -30,7 +30,7 @@ pipeline {
                 sh "echo Welcome Tataji"
                 sh "echo ${ENV_URL}" 
                 sh "env"
-                sh "sleep 1"        s
+                sh "sleep 1"        
             }
         }
         stage('Third stage') { 
