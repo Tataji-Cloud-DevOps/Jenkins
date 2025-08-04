@@ -1,10 +1,13 @@
 pipeline {
     agent any 
     environment { 
-        ENV_URL= "Pipeline.google.com"        
+        ENV URL = "Pipeline.google.com"        
         SSHCRED = credentials('SSHCRED')       
     }
-    options { buildDiscarder(logRotator(numToKeepStr: '5')) }
+    options {
+     buildDiscarder(logRotator(numToKeepStr: '5'))
+     disableConcurrentBuilds()
+    }
     stages {
         stage('First stage') { 
             steps {
@@ -14,7 +17,7 @@ pipeline {
         }
         stage('Second stage') { 
              environment { 
-                 ENV_URL= "Pipeline.google.com"  
+                 ENV URL = "Pipeline.google.com"   
            }
             steps {
                 sh "echo Welcome Tataji"
