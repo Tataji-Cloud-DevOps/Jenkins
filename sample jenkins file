@@ -130,7 +130,7 @@ pipeline {
 ```````
 * Jenkins offers a quite generic and secret manager where we store the secrets and we can fetch the secrets.
 * Set the jenkins secret credentilas by below steps.
-* Manage JENKINS > Credentials > System > Global credentials > Add credentials.
+* Manage JENKINS > Credentials > System > Global credentials > Add credentials. # (First we have set these setup for username and password)
 
 ```````
 ### Username and password pipeline
@@ -187,6 +187,53 @@ pipeline {
     }
 }
 
+`````````
+# Work Space of Jenkins
+```
+It is the current or in directory of where the job runs
+
+WORKSPACE=/var/lib/jenkins/workspace/Sample Pipeline SCM
+
+`````
+# Otions
+
+  * Discard old builds : It is for to discard the old buils.(For old logs to delete)
+  * Do not allow concurrent bills : At a time the same cannot run by this option (it goes in a que).
+
+## Discard old build in the form of code
+
+````
+pipeline {
+    agent any 
+    environment { 
+        ENV URL = "Pipeline.google.com"        # Global Variable : All the stages of the pipeline can inherit this
+        SSHCRED = credentials('SSHCRED')       # The secret manager has run at the the top of the pipeline
+    }
+    options { buildDiscarder(logRotator(numToKeepStr: '5')) }
+    stages {
+        stage('First stage') { 
+            steps {
+               sh "echo Welcome world!" 
+               sh "echo ${ENV_URL}"
+            }
+        }
+        stage('Second stage') { 
+             environment { 
+                 ENV URL = "Pipeline.google.com"  # Local Variable :Scope of the local variable is confined to this stage only
+           }
+            steps {
+                sh "echo Welcome Tataji"
+                sh "echo ${ENV_URL}" 
+                sh "env"                  # Environment variables
+            }
+        }
+        stage('Third stage') { 
+            steps {
+               echo "Welcome DevOps"
+            }
+        }
+    }
+}
 
 
 
