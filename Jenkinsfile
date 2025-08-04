@@ -1,7 +1,7 @@
 pipeline {
     agent any 
     environment { 
-        ENV URL = "Pipeline.google.com"        # Global Variable : All the stages of the pipeline can inherit this
+        ENV_URL= "Pipeline.google.com"        # Global Variable : All the stages of the pipeline can inherit this
         SSHCRED = credentials('SSHCRED')       # The secret manager has run at the the top of the pipeline
     }
     options { buildDiscarder(logRotator(numToKeepStr: '5')) }
@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Second stage') { 
              environment { 
-                 ENV URL = "Pipeline.google.com"  # Local Variable :Scope of the local variable is confined to this stage only
+                 ENV_URL= "Pipeline.google.com"  # Local Variable :Scope of the local variable is confined to this stage only
            }
             steps {
                 sh "echo Welcome Tataji"
