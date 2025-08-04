@@ -1,8 +1,8 @@
 pipeline {
     agent any 
     environment { 
-        ENV URL = "Pipeline.google.com"        # Global Variable : All the stages of the pipeline can inherit this
-        SSHCRED = credentials('SSHCRED')       # The secret manager has run at the the top of the pipeline
+        ENV URL = "Pipeline.google.com"        
+        SSHCRED = credentials('SSHCRED')       
     }
     stages {
         stage('First stage') { 
@@ -13,12 +13,12 @@ pipeline {
         }
         stage('Second stage') { 
              environment { 
-                 ENV URL = "Pipeline.google.com"  # Local Variable :Scope of the local variable is confined to this stage only
+                 ENV URL = "Pipeline.google.com"  
            }
             steps {
                 sh "echo Welcome Tataji"
                 sh "echo ${ENV_URL}" 
-                sh "env"                  # Environment variables
+                sh "env"                 
             }
         }
         stage('Third stage') { 
