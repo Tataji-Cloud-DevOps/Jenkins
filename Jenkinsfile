@@ -2,6 +2,7 @@ pipeline {
     agent any 
     environment { 
         ENV URL = "Pipeline.google.com"        # Global Variable : All the stages of the pipeline can inherit this
+        SSHCRED = credentials('SSHCRED')       # The secret manager has run at the the top of the pipeline
     }
     stages {
         stage('First stage') { 
