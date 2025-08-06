@@ -543,7 +543,7 @@ pipeline {
 * So that when there is any commit on xyz-repo, jenins-xyx would be triggered automatically.
 ``````
 
-# Para
+# Parallel
 
 ``````
 pipeline {
