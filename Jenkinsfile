@@ -44,6 +44,7 @@ pipeline {
             steps {
                echo "Welcome DevOps"
             }
+        } 
         stage('Testing') {
             parallel { 
                     stage('unit testing') {
