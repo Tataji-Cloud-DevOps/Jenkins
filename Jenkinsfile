@@ -19,7 +19,7 @@ pipeline {
         choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
     }
     tools {
-        maven 'apache-maven-3.9.5'
+        maven 'apache-maven-395'
     }
 
     stages {
@@ -36,7 +36,7 @@ pipeline {
                 ENV_URL = "Pipeline.google.com"  
             }
             tools {
-                maven 'apache-maven-3.9.8'
+                maven 'apache-maven-398'
             }
             steps {
                 sh "echo Welcome Tataji"
