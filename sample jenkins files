@@ -616,3 +616,7 @@ pipeline {
     }
 }
 ``````
+* Jenkins UI for stage view.
+    In jenkins UI what we see in the stage view it is the classic interface and there is also a updated interface that is the Blue ocean
+* Jenikns is all about plugins, and a plugin is nothing but a feature, if we want a feature install the plugin.
+
