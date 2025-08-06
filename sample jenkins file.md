@@ -26,7 +26,8 @@ pipeline {
 
 ## Directives
 
-### environment 
+### environment
+
 
 ````````
 The environment directive specifies a sequence of key-value pairs which will be defined
@@ -34,9 +35,9 @@ The environment directive specifies a sequence of key-value pairs which will be 
  environment directive is located within the Pipeline.
 ````````
 
-### Syntax for environment variable
 
-``````````
+### Syntax for environment variable
+``````
 pipeline {
     agent any
     environment { 
@@ -53,10 +54,11 @@ pipeline {
         }
     }
 }
-``````````
-### example of the environment variable
+``````
 
-``````````
+
+### example of the environment variable
+``````
 pipeline {
     agent any 
     environment { 
@@ -86,13 +88,14 @@ pipeline {
     }
 }
 
-``````````
+``````
+
 ##  Environment variables
 # $ env ----it is command for list of environment variables that already declared in the linux.
 #   ex : * a=1000 if we declare it will not store in the system heat memory but it is defined as local.
 #        * export a=1000 if we declare it will store in the system heat memory.
 
-``````````
+``````
 pipeline {
     agent any 
     environment { 
@@ -122,17 +125,19 @@ pipeline {
         }
     }
 }
+``````
 
-`````````
+
 ## Supported Credentials Type
 ### Username and password
 ### If any sort of sensitive information thats need to supply to jenkins where do you declare it?
-```````
+``````
 * Jenkins offers a quite generic and secret manager where we store the secrets and we can fetch the secrets.
 * Set the jenkins secret credentilas by below steps.
 * Manage JENKINS > Credentials > System > Global credentials > Add credentials. # (First we have set these setup for username and password)
 
-```````
+``````
+
 ### Username and password pipeline
 ### Syntax
 ``````
@@ -152,10 +157,10 @@ pipeline {
         }
     }
 }
+``````
 
-`````
 ### Senerio
-```````
+``````
 pipeline {
     agent any 
     environment { 
@@ -186,15 +191,15 @@ pipeline {
         }
     }
 }
+``````
 
-`````````
 # Work Space of Jenkins
-```
+``````
 It is the current or in directory of where the job runs
 
 WORKSPACE=/var/lib/jenkins/workspace/Sample Pipeline SCM
+``````
 
-`````
 # Otions
 
   * Discard old builds : It is for to discard the old buils.(For old logs to delete)
@@ -202,7 +207,7 @@ WORKSPACE=/var/lib/jenkins/workspace/Sample Pipeline SCM
 
 ## Discard old build in the form of code and the option wiil select automatically in the Jenkins UI
 
-````
+``````
 pipeline {
     agent any 
     environment { 
@@ -234,9 +239,10 @@ pipeline {
         }
     }
 }
-`````````
+``````
+
 ## Do not allow concurrent bills or disableConcurrentBuilds and the option wiil select automatically in the Jenkins UI
---------
+``````
 pipeline {
     agent any 
     environment { 
@@ -271,11 +277,12 @@ pipeline {
         }
     }
 }
-````````
+``````
+
 ## timeout 
 * Set a timeout period for this stage, after which Jenkins should abort the stage. For example: options { timeout(time: 1, unit: 'HOURS') }
 * It is for to run a job at a certain period of time when we build.
-`````
+``````
 pipeline {
     agent any 
     environment { 
@@ -312,10 +319,11 @@ pipeline {
     }
 }
 ``````
+
 ## Parameters
 * Parameter are like string parameters
 
-`````````
+``````
 pipeline {
     agent any 
     environment { 
@@ -357,10 +365,11 @@ pipeline {
         }
     }
 }
-````````````
+``````
+
 ## TOOLS
 * On the fly Jenkins will install the needed version for this job ---->Post of the completion of the Job, that will be deleted from the system.
-`````
+``````
 pipeline {
     agent any 
     environment { 
@@ -410,14 +419,16 @@ pipeline {
         }
     }
 }
-`````
+``````
+
 ## Cron : Running the job based on just the scheduler
 ### Syntax
-```
+``````
 triggers { cron('H */4 * * 1-5') }
-```
+``````
 
-```````
+
+``````
 pipeline {
     agent any 
     environment { 
@@ -468,10 +479,11 @@ pipeline {
         }
     }
 }
-````
+``````
+
 PollSCM : We can schedule some time -----> It goes and checks the git repo that you mentioned---->if there are any commits on the repo,then the job will run
 
-```````
+``````
 pipeline {
     agent any 
     environment { 
@@ -522,4 +534,4 @@ pipeline {
         }
     }
 }
-````
+``````
